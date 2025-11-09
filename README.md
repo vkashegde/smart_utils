@@ -165,7 +165,7 @@ final remainingHeight = context.remainingParentHeight(usedHeight: 200);
 final constraints = context.getParentConstraints();
 final aspectRatio = context.parentAspectRatio();
 
-// Get widget position and size
+// Get widget position and sizei have readme and everthink
 final position = context.getGlobalPosition();
 final size = context.getWidgetSize();
 final parentPosition = context.getPositionInParent();

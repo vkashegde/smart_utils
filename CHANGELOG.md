@@ -1,3 +1,3 @@
-## 0.0.1
-
-* TODO: Describe initial release.
+## 1.0.0
+- Initial release 🎉
+- Includes DateUtilsPlus, StringUtilsPlus, DeviceUtilsPlus, WidgetUtilsPlus, and LoggerPlus modules.
