@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:smart_utils/smart_utils.dart';
+import 'package:smart_utils_plus/smart_utils.dart';
 
 void main() {
   test('Platform detection should return boolean values', () {

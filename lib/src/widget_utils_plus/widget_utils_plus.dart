@@ -8,7 +8,7 @@ library;
 ///
 /// Example:
 /// ```dart
-/// import 'package:smart_utils/widget_utils_plus.dart';
+/// import 'package:smart_utils_plus/widget_utils_plus.dart';
 /// ```
 ///
 /// Then:

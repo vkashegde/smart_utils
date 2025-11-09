@@ -1,4 +1,4 @@
-# Smart Utils
+# Smart Utils Plus
 
 A comprehensive Flutter utility package providing essential helper classes for date/time manipulation, string operations, device information, logging, and widget utilities.
 
@@ -17,7 +17,7 @@ Add this package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  smart_utils: ^0.0.1
+  smart_utils_plus: ^0.0.1
 ```
 
 Then run:
@@ -30,7 +30,7 @@ flutter pub get
 ### DateUtilsPlus
 
 ```dart
-import 'package:smart_utils/smart_utils.dart';
+import 'package:smart_utils_plus/smart_utils.dart';
 
 // Human-readable time ago
 DateUtilsPlus.timeAgo(DateTime.now().subtract(Duration(hours: 3)));
@@ -55,7 +55,7 @@ DateUtilsPlus.diffSummary(startDate, endDate);
 ### StringUtilsPlus
 
 ```dart
-import 'package:smart_utils/smart_utils.dart';
+import 'package:smart_utils_plus/smart_utils.dart';
 
 // Capitalize first letter
 StringUtilsPlus.capitalize('hello'); // "Hello"
@@ -76,7 +76,7 @@ StringUtilsPlus.isUrl('https://flutter.dev'); // true
 ### DeviceUtilsPlus
 
 ```dart
-import 'package:smart_utils/smart_utils.dart';
+import 'package:smart_utils_plus/smart_utils.dart';
 
 // Platform detection
 DeviceUtilsPlus.isAndroid; // true/false
@@ -104,7 +104,7 @@ DeviceUtilsPlus.isLandscape(context);
 ### WidgetUtilsPlus
 
 ```dart
-import 'package:smart_utils/smart_utils.dart';
+import 'package:smart_utils_plus/smart_utils.dart';
 
 // Snackbars
 WidgetUtilsPlus.showSuccessSnackbar(context, "Operation successful!");
@@ -151,7 +151,7 @@ await WidgetUtilsPlus.showMessageSheet(
 ### ContextSizeHelper
 
 ```dart
-import 'package:smart_utils/smart_utils.dart';
+import 'package:smart_utils_plus/smart_utils.dart';
 
 // Get parent width/height as fraction
 final width = context.parentWidth(0.5); // 50% of parent width
@@ -174,7 +174,7 @@ final parentPosition = context.getPositionInParent();
 ### LoggerPlus
 
 ```dart
-import 'package:smart_utils/smart_utils.dart';
+import 'package:smart_utils_plus/smart_utils.dart';
 
 // Log messages with colors
 LoggerPlus.info('Information message');

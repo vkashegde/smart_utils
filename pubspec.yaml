@@ -1,7 +1,7 @@
-name: smart_utils
+name: smart_utils_plus
 description: A comprehensive Flutter utility package providing essential helper classes for date/time manipulation, string operations, device information, logging, and widget utilities.
 version: 0.0.1
-homepage: https://github.com/yourusername/smart_utils
+homepage: https://github.com/yourusername/smart_utils_plus
 
 environment:
   sdk: ^3.6.0

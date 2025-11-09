@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:smart_utils/smart_utils.dart';
+import 'package:smart_utils_plus/smart_utils.dart';
 
 void main() {
   test('all utility classes are properly exported', () {

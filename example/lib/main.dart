@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_utils/smart_utils.dart';
+import 'package:smart_utils_plus/smart_utils.dart';
 
 void main() {
   runApp(const SmartUtilsExample());
