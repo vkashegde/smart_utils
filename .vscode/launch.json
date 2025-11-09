@@ -1,0 +1,40 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Example App (Debug)",
+      "request": "launch",
+      "type": "dart",
+      "program": "${workspaceFolder}/example/lib/main.dart",
+      "flutterMode": "debug"
+    },
+    {
+      "name": "Example App (Profile)",
+      "request": "launch",
+      "type": "dart",
+      "program": "${workspaceFolder}/example/lib/main.dart",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "Example App (Release)",
+      "request": "launch",
+      "type": "dart",
+      "program": "${workspaceFolder}/example/lib/main.dart",
+      "flutterMode": "release"
+    },
+    {
+      "name": "Run Package Tests",
+      "request": "launch",
+      "type": "dart",
+      "program": "${workspaceFolder}/test/smart_utils_test.dart",
+      "flutterMode": "debug"
+    },
+    {
+      "name": "Run Example App Tests",
+      "request": "launch",
+      "type": "dart",
+      "program": "${workspaceFolder}/example/test/widget_test.dart",
+      "flutterMode": "debug"
+    }
+  ]
+}
