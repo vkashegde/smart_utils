@@ -30,7 +30,7 @@ flutter pub get
 ### DateUtilsPlus
 
 ```dart
-import 'package:smart_utils_plus/smart_utils.dart';
+import 'package:smart_utils_plus/smart_utils_plus.dart';
 
 // Human-readable time ago
 DateUtilsPlus.timeAgo(DateTime.now().subtract(Duration(hours: 3)));
@@ -55,7 +55,7 @@ DateUtilsPlus.diffSummary(startDate, endDate);
 ### StringUtilsPlus
 
 ```dart
-import 'package:smart_utils_plus/smart_utils.dart';
+import 'package:smart_utils_plus/smart_utils_plus.dart';
 
 // Capitalize first letter
 StringUtilsPlus.capitalize('hello'); // "Hello"
@@ -76,7 +76,7 @@ StringUtilsPlus.isUrl('https://flutter.dev'); // true
 ### DeviceUtilsPlus
 
 ```dart
-import 'package:smart_utils_plus/smart_utils.dart';
+import 'package:smart_utils_plus/smart_utils_plus.dart';
 
 // Platform detection
 DeviceUtilsPlus.isAndroid; // true/false
@@ -104,7 +104,7 @@ DeviceUtilsPlus.isLandscape(context);
 ### WidgetUtilsPlus
 
 ```dart
-import 'package:smart_utils_plus/smart_utils.dart';
+import 'package:smart_utils_plus/smart_utils_plus.dart';
 
 // Snackbars
 WidgetUtilsPlus.showSuccessSnackbar(context, "Operation successful!");
@@ -151,7 +151,7 @@ await WidgetUtilsPlus.showMessageSheet(
 ### ContextSizeHelper
 
 ```dart
-import 'package:smart_utils_plus/smart_utils.dart';
+import 'package:smart_utils_plus/smart_utils_plus.dart';
 
 // Get parent width/height as fraction
 final width = context.parentWidth(0.5); // 50% of parent width
@@ -174,7 +174,7 @@ final parentPosition = context.getPositionInParent();
 ### LoggerPlus
 
 ```dart
-import 'package:smart_utils_plus/smart_utils.dart';
+import 'package:smart_utils_plus/smart_utils_plus.dart';
 
 // Log messages with colors
 LoggerPlus.info('Information message');

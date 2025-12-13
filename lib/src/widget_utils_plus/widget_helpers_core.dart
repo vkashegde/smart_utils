@@ -2,21 +2,56 @@ import 'package:flutter/material.dart';
 
 /// A utility class providing common widget helpers:
 /// Snackbars, toasts, loaders, dialogs, etc.
+///
+/// All methods validate the [BuildContext] before use to prevent errors.
 class WidgetUtilsPlus {
+  // Track active toast overlay entries to prevent memory leaks
+  static final Set<OverlayEntry> _activeToastEntries = {};
+
+  /// Validates that the context is still mounted and has required widgets.
+  static bool _isValidContext(BuildContext? context) {
+    if (context == null) return false;
+    try {
+      // Check if context is still mounted
+      if (!context.mounted) return false;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   // --------------------------------------------------
   // 🔔 SNACKBARS
   // --------------------------------------------------
 
+  /// Shows a custom snackbar with the specified message and styling.
+  ///
+  /// Validates the context before showing. If no [ScaffoldMessenger] is found,
+  /// the snackbar will not be shown.
+  ///
+  /// Example:
+  /// ```dart
+  /// WidgetUtilsPlus.showSnackbar(
+  ///   context,
+  ///   message: 'Operation completed',
+  ///   backgroundColor: Colors.green,
+  /// );
+  /// ```
   static void showSnackbar(
-    BuildContext context, {
+    BuildContext? context, {
     required String message,
     Color backgroundColor = Colors.black87,
     Color textColor = Colors.white,
     Duration duration = const Duration(seconds: 2),
     SnackBarAction? action,
   }) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(
+    if (!_isValidContext(context)) return;
+
+    final messenger = ScaffoldMessenger.maybeOf(context!);
+    if (messenger == null) return;
+
+    messenger.hideCurrentSnackBar();
+    messenger.showSnackBar(
       SnackBar(
         content: Text(
           message,
@@ -29,7 +64,13 @@ class WidgetUtilsPlus {
     );
   }
 
-  static void showSuccessSnackbar(BuildContext context, String message) {
+  /// Shows a success snackbar with green background.
+  ///
+  /// Example:
+  /// ```dart
+  /// WidgetUtilsPlus.showSuccessSnackbar(context, 'Success!');
+  /// ```
+  static void showSuccessSnackbar(BuildContext? context, String message) {
     showSnackbar(
       context,
       message: message,
@@ -37,7 +78,13 @@ class WidgetUtilsPlus {
     );
   }
 
-  static void showErrorSnackbar(BuildContext context, String message) {
+  /// Shows an error snackbar with red background.
+  ///
+  /// Example:
+  /// ```dart
+  /// WidgetUtilsPlus.showErrorSnackbar(context, 'Error occurred!');
+  /// ```
+  static void showErrorSnackbar(BuildContext? context, String message) {
     showSnackbar(
       context,
       message: message,
@@ -45,7 +92,13 @@ class WidgetUtilsPlus {
     );
   }
 
-  static void showInfoSnackbar(BuildContext context, String message) {
+  /// Shows an info snackbar with blue background.
+  ///
+  /// Example:
+  /// ```dart
+  /// WidgetUtilsPlus.showInfoSnackbar(context, 'Information');
+  /// ```
+  static void showInfoSnackbar(BuildContext? context, String message) {
     showSnackbar(
       context,
       message: message,
@@ -57,15 +110,34 @@ class WidgetUtilsPlus {
   // 🍞 TOAST (Overlay-style)
   // --------------------------------------------------
 
+  /// Shows a toast message as an overlay.
+  ///
+  /// Properly manages overlay entries to prevent memory leaks.
+  /// Automatically removes the toast after [duration].
+  ///
+  /// Example:
+  /// ```dart
+  /// WidgetUtilsPlus.showToast(
+  ///   context,
+  ///   message: 'Toast message',
+  ///   duration: Duration(seconds: 3),
+  /// );
+  /// ```
   static void showToast(
-    BuildContext context, {
+    BuildContext? context, {
     required String message,
     Color backgroundColor = Colors.black87,
     Color textColor = Colors.white,
     Duration duration = const Duration(seconds: 2),
     double bottomOffset = 80,
   }) {
-    final overlay = Overlay.of(context);
+    if (!_isValidContext(context)) return;
+
+    final overlay = Overlay.maybeOf(context!);
+    if (overlay == null) return;
+
+    // Clean up any existing toast entries
+    _cleanupToastEntries(overlay);
 
     final overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
@@ -94,9 +166,41 @@ class WidgetUtilsPlus {
       ),
     );
 
+    _activeToastEntries.add(overlayEntry);
     overlay.insert(overlayEntry);
 
-    Future.delayed(duration, () => overlayEntry.remove());
+    Future.delayed(duration, () {
+      if (_activeToastEntries.contains(overlayEntry)) {
+        overlayEntry.remove();
+        _activeToastEntries.remove(overlayEntry);
+      }
+    });
+  }
+
+  /// Cleans up all active toast overlay entries.
+  ///
+  /// This should be called when the app is disposed or when you want
+  /// to manually clear all toasts.
+  static void _cleanupToastEntries(OverlayState overlay) {
+    for (final entry in _activeToastEntries.toList()) {
+      try {
+        entry.remove();
+      } catch (e) {
+        // Entry may have already been removed
+      }
+    }
+    _activeToastEntries.clear();
+  }
+
+  /// Manually dismisses all active toast messages.
+  ///
+  /// Useful for cleaning up toasts when navigating away or on app pause.
+  static void dismissAllToasts(BuildContext? context) {
+    if (!_isValidContext(context)) return;
+    final overlayState = Overlay.maybeOf(context!);
+    if (overlayState != null) {
+      _cleanupToastEntries(overlayState);
+    }
   }
 
   // --------------------------------------------------
@@ -105,10 +209,21 @@ class WidgetUtilsPlus {
 
   static OverlayEntry? _loaderEntry;
 
-  static void showLoader(BuildContext context, {String? message}) {
+  /// Shows a global loading indicator overlay.
+  ///
+  /// Only one loader can be shown at a time. If a loader is already showing,
+  /// this method will return without creating a new one.
+  ///
+  /// Example:
+  /// ```dart
+  /// WidgetUtilsPlus.showLoader(context, message: 'Loading...');
+  /// ```
+  static void showLoader(BuildContext? context, {String? message}) {
+    if (!_isValidContext(context)) return;
     if (_loaderEntry != null) return;
 
-    final overlay = Overlay.of(context);
+    final overlay = Overlay.maybeOf(context!);
+    if (overlay == null) return;
 
     _loaderEntry = OverlayEntry(
       builder: (_) => Stack(
@@ -142,24 +257,55 @@ class WidgetUtilsPlus {
     overlay.insert(_loaderEntry!);
   }
 
-  static void hideLoader(BuildContext context) {
-    _loaderEntry?.remove();
-    _loaderEntry = null;
+  /// Hides the global loading indicator.
+  ///
+  /// Safe to call even if no loader is currently showing.
+  ///
+  /// Example:
+  /// ```dart
+  /// WidgetUtilsPlus.hideLoader(context);
+  /// ```
+  static void hideLoader(BuildContext? context) {
+    if (_loaderEntry != null) {
+      try {
+        _loaderEntry!.remove();
+      } catch (e) {
+        // Entry may have already been removed
+      }
+      _loaderEntry = null;
+    }
   }
 
   // --------------------------------------------------
   // 💬 DIALOG HELPERS
   // --------------------------------------------------
 
+  /// Shows a confirmation dialog with Yes/No buttons.
+  ///
+  /// Returns `true` if confirmed, `false` if cancelled, or `null` if dismissed.
+  ///
+  /// Example:
+  /// ```dart
+  /// final confirmed = await WidgetUtilsPlus.showConfirmDialog(
+  ///   context,
+  ///   title: 'Confirm',
+  ///   message: 'Are you sure?',
+  /// );
+  /// if (confirmed == true) {
+  ///   // User confirmed
+  /// }
+  /// ```
   static Future<bool?> showConfirmDialog(
-    BuildContext context, {
+    BuildContext? context, {
     required String title,
     required String message,
     String confirmText = 'Yes',
     String cancelText = 'Cancel',
   }) {
+    if (!_isValidContext(context)) return Future.value(null);
+
     return showDialog<bool>(
-      context: context,
+      context: context!,
       builder: (context) => AlertDialog(
         title: Text(title),
         content: Text(message),
@@ -181,8 +327,21 @@ class WidgetUtilsPlus {
   // 📤 GLOBAL BOTTOM SHEET
   // --------------------------------------------------
 
+  /// Shows a customizable bottom sheet.
+  ///
+  /// [maxHeightFraction] controls the maximum height as a fraction of screen height
+  /// (e.g., 0.8 for 80% of screen).
+  ///
+  /// Example:
+  /// ```dart
+  /// await WidgetUtilsPlus.showBottomSheetPlus(
+  ///   context,
+  ///   child: YourWidget(),
+  ///   maxHeightFraction: 0.8,
+  /// );
+  /// ```
   static Future<T?> showBottomSheetPlus<T>(
-    BuildContext context, {
+    BuildContext? context, {
     required Widget child,
     bool isDismissible = true,
     bool enableDrag = true,
@@ -190,7 +349,9 @@ class WidgetUtilsPlus {
     Color backgroundColor = Colors.white,
     double borderRadius = 16.0,
   }) {
-    final maxHeight = MediaQuery.of(context).size.height * (maxHeightFraction ?? 0.8);
+    if (!_isValidContext(context)) return Future.value(null);
+
+    final maxHeight = MediaQuery.of(context!).size.height * (maxHeightFraction ?? 0.8);
 
     return showModalBottomSheet<T>(
       context: context,
@@ -223,13 +384,24 @@ class WidgetUtilsPlus {
     );
   }
 
-  /// Quickly show a text-only bottom sheet with a message
+  /// Quickly show a text-only bottom sheet with a message.
+  ///
+  /// Example:
+  /// ```dart
+  /// await WidgetUtilsPlus.showMessageSheet(
+  ///   context,
+  ///   title: 'Title',
+  ///   message: 'Message content',
+  /// );
+  /// ```
   static Future<void> showMessageSheet(
-    BuildContext context, {
+    BuildContext? context, {
     required String title,
     required String message,
     String buttonText = "Close",
   }) {
+    if (!_isValidContext(context)) return Future.value();
+
     return showBottomSheetPlus(
       context,
       child: Padding(
@@ -246,7 +418,7 @@ class WidgetUtilsPlus {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => Navigator.of(context!).pop(),
               child: Text(buttonText),
             ),
           ],
