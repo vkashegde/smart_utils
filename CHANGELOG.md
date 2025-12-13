@@ -1,3 +1,9 @@
+## 1.1.0
+
+- Added NumberUtilsPlus with currency formatting, compact numbers, percentages, random number generation, and rounding utilities
+
+---
+
 ## 1.0.0
 
 ### Improvements
