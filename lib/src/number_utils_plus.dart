@@ -171,4 +171,3 @@ class NumberUtilsPlus {
     return (value * factor).ceil() / factor;
   }
 }
-
