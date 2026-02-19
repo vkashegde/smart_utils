@@ -1,3 +1,14 @@
+## 1.2.0
+
+- Added ResponsiveUtilsPlus with breakpoint-based responsive design utilities
+  - Breakpoint detection (mobile, tablet, desktop) based on screen width
+  - Responsive value selection with fallback chain
+  - Helper methods for padding, font size, columns, spacing, and max width
+  - Extension methods on BuildContext for convenient usage
+  - Default breakpoints: mobile < 600px, tablet 600-1024px, desktop >= 1024px
+
+---
+
 ## 1.1.0
 
 - Added NumberUtilsPlus with currency formatting, compact numbers, percentages, random number generation, and rounding utilities

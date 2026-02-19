@@ -66,12 +66,13 @@ class _HomePageState extends State<HomePage> {
         elevation: 2,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: context.responsivePadding(mobile: 16.0, tablet: 24.0, desktop: 32.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Widget Utils Section
             _buildSection(
+              context: context,
               title: 'Widget Utils',
               children: [
                 _buildButton(
@@ -162,10 +163,11 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: context.responsiveSpacing(mobile: 24.0, tablet: 28.0, desktop: 32.0)),
 
             // String Utils Section
             _buildSection(
+              context: context,
               title: 'String Utils',
               children: [
                 _buildDemoCard(
@@ -204,10 +206,11 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: context.responsiveSpacing(mobile: 24.0, tablet: 28.0, desktop: 32.0)),
 
             // Date Utils Section
             _buildSection(
+              context: context,
               title: 'Date Utils',
               children: [
                 _buildDemoCard(
@@ -241,10 +244,11 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: context.responsiveSpacing(mobile: 24.0, tablet: 28.0, desktop: 32.0)),
 
             // Device Utils Section
             _buildSection(
+              context: context,
               title: 'Device Utils',
               children: [
                 if (isLoading)
@@ -283,10 +287,11 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: context.responsiveSpacing(mobile: 24.0, tablet: 28.0, desktop: 32.0)),
 
             // Logger Section
             _buildSection(
+              context: context,
               title: 'Logger Plus',
               children: [
                 _buildButton(
@@ -342,10 +347,11 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
 
-            const SizedBox(height: 24),
+            SizedBox(height: context.responsiveSpacing(mobile: 24.0, tablet: 28.0, desktop: 32.0)),
 
             // Context Size Helper Section
             _buildSection(
+              context: context,
               title: 'Context Size Helper',
               children: [
                 _buildDemoCard(
@@ -366,8 +372,163 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
+
+            SizedBox(height: context.responsiveSpacing(mobile: 24.0, tablet: 28.0, desktop: 32.0)),
+
+            // Number Utils Section
+            _buildSection(
+              context: context,
+              title: 'Number Utils',
+              children: [
+                _buildDemoCard(
+                  'Format Currency',
+                  NumberUtilsPlus.formatCurrency(1234.56),
+                ),
+                _buildDemoCard(
+                  'Format Compact',
+                  NumberUtilsPlus.formatCompact(1500000),
+                ),
+                _buildDemoCard(
+                  'Format Percentage',
+                  NumberUtilsPlus.formatPercentage(0.1234),
+                ),
+                _buildDemoCard(
+                  'Round To',
+                  NumberUtilsPlus.roundTo(3.14159, 2).toString(),
+                ),
+              ],
+            ),
+
+            SizedBox(height: context.responsiveSpacing(mobile: 24.0, tablet: 28.0, desktop: 32.0)),
+
+            // Responsive Utils Section
+            _buildSection(
+              context: context,
+              title: 'Responsive Utils',
+              children: [
+                _buildDemoCard(
+                  'Is Mobile',
+                  ResponsiveUtilsPlus.isMobile(context).toString(),
+                ),
+                _buildDemoCard(
+                  'Is Tablet',
+                  ResponsiveUtilsPlus.isTablet(context).toString(),
+                ),
+                _buildDemoCard(
+                  'Is Desktop',
+                  ResponsiveUtilsPlus.isDesktop(context).toString(),
+                ),
+                _buildDemoCard(
+                  'Screen Width',
+                  '${MediaQuery.of(context).size.width.toStringAsFixed(0)}px',
+                ),
+                _buildDemoCard(
+                  'Responsive Padding',
+                  '${context.responsivePadding(mobile: 16.0).top.toStringAsFixed(0)}px',
+                ),
+                _buildDemoCard(
+                  'Responsive Font Size',
+                  '${context.responsiveFontSize(mobile: 14.0, tablet: 18.0, desktop: 24.0).toStringAsFixed(0)}px',
+                ),
+                _buildDemoCard(
+                  'Responsive Columns',
+                  context.responsiveColumns(mobile: 1, tablet: 2, desktop: 3).toString(),
+                ),
+                _buildDemoCard(
+                  'Responsive Spacing',
+                  '${context.responsiveSpacing(mobile: 8.0, tablet: 12.0, desktop: 16.0).toStringAsFixed(0)}px',
+                ),
+                _buildButton(
+                  'Show Responsive Layout',
+                  () {
+                    WidgetUtilsPlus.showBottomSheetPlus(
+                      context,
+                      child: _buildResponsiveDemo(context),
+                    );
+                  },
+                ),
+              ],
+            ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildResponsiveDemo(BuildContext context) {
+    return Padding(
+      padding: context.responsivePadding(mobile: 16.0, tablet: 24.0, desktop: 32.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Responsive Demo',
+            style: TextStyle(
+              fontSize: context.responsiveFontSize(mobile: 20.0, tablet: 24.0, desktop: 28.0),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: context.responsiveSpacing(mobile: 16.0, tablet: 20.0, desktop: 24.0)),
+          Text(
+            'Current Breakpoint:',
+            style: TextStyle(
+              fontSize: context.responsiveFontSize(mobile: 14.0, tablet: 16.0, desktop: 18.0),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            padding: context.responsivePadding(mobile: 12.0, tablet: 16.0, desktop: 20.0),
+            decoration: BoxDecoration(
+              color: ResponsiveUtilsPlus.isMobile(context)
+                  ? Colors.blue[100]
+                  : ResponsiveUtilsPlus.isTablet(context)
+                      ? Colors.green[100]
+                      : Colors.purple[100],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              ResponsiveUtilsPlus.isMobile(context)
+                  ? '📱 Mobile Layout'
+                  : ResponsiveUtilsPlus.isTablet(context)
+                      ? '📱 Tablet Layout'
+                      : '🖥️ Desktop Layout',
+              style: TextStyle(
+                fontSize: context.responsiveFontSize(mobile: 16.0, tablet: 18.0, desktop: 20.0),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          SizedBox(height: context.responsiveSpacing(mobile: 16.0, tablet: 20.0, desktop: 24.0)),
+          Text(
+            'Grid Columns: ${context.responsiveColumns(mobile: 1, tablet: 2, desktop: 3)}',
+            style: TextStyle(
+              fontSize: context.responsiveFontSize(mobile: 14.0, tablet: 16.0, desktop: 18.0),
+            ),
+          ),
+          SizedBox(height: context.responsiveSpacing(mobile: 8.0, tablet: 12.0, desktop: 16.0)),
+          Text(
+            'Padding: ${context.responsivePadding(mobile: 16.0).top.toStringAsFixed(0)}px',
+            style: TextStyle(
+              fontSize: context.responsiveFontSize(mobile: 14.0, tablet: 16.0, desktop: 18.0),
+            ),
+          ),
+          SizedBox(height: context.responsiveSpacing(mobile: 8.0, tablet: 12.0, desktop: 16.0)),
+          Text(
+            'Font Size: ${context.responsiveFontSize(mobile: 14.0, tablet: 18.0, desktop: 24.0).toStringAsFixed(0)}px',
+            style: TextStyle(
+              fontSize: context.responsiveFontSize(mobile: 14.0, tablet: 16.0, desktop: 18.0),
+            ),
+          ),
+          SizedBox(height: context.responsiveSpacing(mobile: 16.0, tablet: 20.0, desktop: 24.0)),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Close'),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -375,22 +536,23 @@ class _HomePageState extends State<HomePage> {
   Widget _buildSection({
     required String title,
     required List<Widget> children,
+    required BuildContext context,
   }) {
     return Card(
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: context.responsivePadding(mobile: 16.0, tablet: 20.0, desktop: 24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               title,
-              style: const TextStyle(
-                fontSize: 20,
+              style: TextStyle(
+                fontSize: context.responsiveFontSize(mobile: 20.0, tablet: 22.0, desktop: 24.0),
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: context.responsiveSpacing(mobile: 12.0, tablet: 16.0, desktop: 20.0)),
             ...children,
           ],
         ),
