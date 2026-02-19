@@ -11,7 +11,8 @@ void main() {
   });
 
   test('truncate should shorten string correctly', () {
-    expect(StringUtilsPlus.truncate('Flutter is awesome', 7), 'Flutter...');
+    expect(StringUtilsPlus.truncate('Flutter is awesome', 7), 'Flut...');
+    expect(StringUtilsPlus.truncate('Flutter is awesome', 10), 'Flutter...');
   });
 
   test('isEmail should validate email', () {
