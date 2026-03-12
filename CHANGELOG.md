@@ -1,3 +1,8 @@
+
+## 1.2.1
+
+  - Minor Bug fixes and redirection links update for pub.dev 
+
 ## 1.2.0
 
 - Added ResponsiveUtilsPlus with breakpoint-based responsive design utilities
